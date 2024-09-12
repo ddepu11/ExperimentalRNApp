@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React, { FC, PropsWithChildren } from "react";
+import { StyleSheet, View } from "react-native";
 
-const App = () => {
+const ScreenWrapper: FC<PropsWithChildren> = ({ children }) => {
   return (
     <View style={styles.container}>
       <StatusBar style="inverted" />
-      <Text>Hello World!!!</Text>
+      {children}
     </View>
   );
 };
@@ -19,4 +20,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default ScreenWrapper;
