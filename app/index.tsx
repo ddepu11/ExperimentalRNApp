@@ -2,7 +2,6 @@ import { Button, Image, Text, useWindowDimensions, View } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { FC, useRef, useState } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
-import ScreenWrapper from "../components/ScreenWrapper";
 
 const App: FC = () => {
   const video = useRef<Video>(null);

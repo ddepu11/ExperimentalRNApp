@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FlatList, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import VideoComponent from "../../components/Video";
 import { FlashList } from "@shopify/flash-list";
@@ -57,20 +57,18 @@ const Videos: FC = () => {
   useEffect(() => {
     getAlbums();
 
-    MediaLibrary.addListener((e) => {
-      console.log("SASAS", e);
-    });
-
     return () => {
       MediaLibrary.removeAllListeners();
     };
   }, []);
 
+  const keyExtractor = useCallback(({ id }: MediaLibrary.Asset) => id, []);
+
   return (
     <View style={{ flex: 1 }}>
-      <FlashList
+      <FlatList
         data={assets}
-        estimatedItemSize={100}
+        keyExtractor={keyExtractor}
         renderItem={({ index, item }) => (
           <VideoComponent index={index + 1} item={item} />
         )}
