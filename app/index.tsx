@@ -1,38 +1,45 @@
-import { Button, Image, Text, useWindowDimensions, View } from "react-native";
-import { Video, ResizeMode } from "expo-av";
 import { FC, useRef, useState } from "react";
+import { Button, useWindowDimensions, View } from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
+import { useVideoPlayer, VideoView } from "expo-video";
+
+const videoSource =
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
 const App: FC = () => {
-  const video = useRef<Video>(null);
-  const [status, setStatus] = useState({});
-  const [image, setImage] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const ref = useRef(null);
 
   const { width } = useWindowDimensions();
   const params = useLocalSearchParams();
 
+  console.log("PARAMS", params);
+
+  const player = useVideoPlayer(
+    params?.uri ? (params.uri as string) : videoSource,
+    (player) => {}
+  );
+
   return (
     <View>
-      <Video
-        ref={video}
-        style={{ width: width, height: width / 1.43 }}
-        source={{
-          uri: params.uri
-            ? params.uri
-            : "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-        }}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        isLooping
-        onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+      <VideoView
+        ref={ref}
+        style={{ width: width, height: 275 }}
+        player={player}
+        allowsFullscreen
+        allowsPictureInPicture
       />
 
       <Button
-        title={status.isPlaying ? "Pause" : "Play"}
+        title={isPlaying ? "Pause" : "Play"}
         onPress={() => {
-          status.isPlaying
-            ? video.current?.pauseAsync()
-            : video.current?.playAsync();
+          if (isPlaying) {
+            player.pause();
+          } else {
+            player.play();
+          }
+          setIsPlaying(!isPlaying);
         }}
       />
 

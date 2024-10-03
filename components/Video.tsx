@@ -1,5 +1,5 @@
-import React, { FC, memo, useEffect } from "react";
-import { useWindowDimensions } from "react-native";
+import React, { FC, memo } from "react";
+import { Text, useWindowDimensions } from "react-native";
 import { Link } from "expo-router";
 import { Asset } from "expo-media-library";
 import { Image } from "expo-image";
@@ -12,13 +12,6 @@ type Props = {
 const VideoComponent: FC<Props> = ({ index, item }) => {
   const { width } = useWindowDimensions();
 
-  useEffect(() => {
-    return () => {
-      Image.clearDiskCache();
-      Image.clearMemoryCache();
-    };
-  }, []);
-
   return (
     <Link
       href={{ pathname: "/", params: { uri: item.uri } }}
@@ -27,18 +20,17 @@ const VideoComponent: FC<Props> = ({ index, item }) => {
         borderWidth: 1,
       }}
     >
-      {/* <Text style={{ marginRight: 5, fontSize: 20 }}>{index} </Text> */}
+      <Text style={{ marginRight: 5, fontSize: 20 }}>{index} </Text>
+      <Text style={{ marginRight: 5, fontSize: 20 }}>{item.filename} </Text>
 
       <Image
-        // source={{ uri: item.uri }}
-        source={item.uri}
+        recyclingKey={item.id}
+        source={{ uri: item.uri }}
         contentFit="cover"
-        blurRadius={1}
+        transition={300}
         style={{
-          flex: 1,
           width,
           height: 300,
-          // backgroundColor: "#0553",
         }}
       />
     </Link>
